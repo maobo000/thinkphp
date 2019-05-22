@@ -19,7 +19,7 @@ class Article extends Controller
     {
         $res = $this->request;
 
-        if ($res->isPost()){
+        if ($res->isPost()) {
             $data = $res->only(['title', 'category_id', 'anthor', 'content', 'status']);
 
             $rule = [
@@ -66,38 +66,114 @@ class Article extends Controller
 
     }
 
-    public function ajaxCategory(){
-        $pid = $this->request->param('id',0);
-        $data = category::where('pid',$pid)->select();
+    public function ajaxCategory()
+    {
+        $pid = $this->request->param('id', 0);
+        $data = category::where('pid', $pid)->select();
         return json($data);
     }
 
-    public function lists(){
-        $list =\app\admin\model\article::with('category')->order('create_time DESC')->paginate(2);
-        $this->assign('list',$list);
+    public function lists()
+    {
+        $list = \app\admin\model\article::with('category')->order('create_time DESC')->paginate(2);
+        $this->assign('list', $list);
         return $this->fetch();
     }
 
 
-    public function changeStatus(){
-        $id =$this->request->param('id');
-        if (empty($id)){
+    public function changeStatus()
+    {
+        $id = $this->request->param('id');
+
+        if (empty($id)) {
             return $this->error('非法操作');
         }
 
         $object = \app\admin\model\article::get($id);
 
-        if (empty($object)){
+        if (empty($object)) {
             return $this->error('非法操作');
         }
 
         $object->status = abs($object->status - 1);
 
-        if ($object->save()){
-            return $this->success('成功','',$object->status);
+        if ($object->save()) {
+            return $this->success('成功', '', $object->status);
 
-        }else{
+        } else {
             return $this->error('失败');
         }
     }
+
+
+    public function delete()
+    {
+
+        $id = $this->request->param('id');
+
+        if (empty($id)) {
+            $this->error('失败');
+        }
+
+        $a = \think\Db::table('article')->where('id', $id)->delete();
+
+        if(empty($a)) {
+            return $this->error('失败');
+        }else{
+            return $this->success('成功');
+        }
+    }
+
+    public function upset()
+    {
+        $re = $this->request;
+        if ($re->isPost()) {
+            $id = $this->request->param('id');
+            $data = $re->only(['title', 'category_id', 'author', 'content', 'status']);
+            $rule = [
+                'title' => 'require|length:1,50',
+                'category_id' => 'require|min:1',
+                'author' => 'length:2,10',
+                'content' => 'require|length:10,65535',
+                'status' => 'in:0,1'
+            ];
+            $msg = [
+                'title.require' => '文章标题为必填项',
+                'title.length' => '文章标题应在1-50字之间',
+                'category_id.require' => '请选择正确的分类信息',
+                'category_id.min' => '请选择正确的分类信息',
+                'author.length' => '署名长度应在2-10个字之间',
+                'content.require' => '文章内容为必填项',
+                'content.length' => '文章内容过短或者过长',
+                'status.in' => '文章状态有误'
+            ];
+            echo 222;
+            $check = $this->validate($data, $rule, $msg);
+            if ($check !== true) {
+                $this->error($check);
+            }
+
+
+            $aa = \think\Db::table('article')->where('id', $id)->select();
+            if ($aa->update($data)) {
+                $this->success('修改成功');
+            } else {
+                $this->error('修改失败2');
+            }
+
+        }
+
+            if ($re->isGet()) {
+
+                $id = $this->request->param('id');
+//                $b = \think\Db::table('article')->where('id', $id)->find();
+
+                $b = \app\admin\model\article::get($id)->toArray();
+                $this->assign('b', $b);
+                return $this->fetch();
+            }
+        }
+
+
+
 }
