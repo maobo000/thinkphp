@@ -15,6 +15,8 @@
 <div class="container wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
+
+            <form method="post" action="" id="form" class="form-horizontal">
             <div class="ibox-content">
 
                 <table class="table table-bordered">
@@ -46,9 +48,9 @@
 
                         </td>
                         <td>
-                            <a href="{:url('admin/Article/delete',['id'=>$v['id']])}" id="xx">删除</a>
+                            <a href="{:url('admin/Article/delete',['id'=>$v['id']])}" id="xx" >删除</a>
 
-                            <a href="{:url('admin/Article/upset',['id'=>$v['id']])}"  id="yy" >修改</a>
+                            <a href="{:url('admin/Article/update',['id'=>$v['id']])}"  id="yy" >修改</a>
                         </td>
                     </tr>
 
@@ -60,6 +62,7 @@
                 {$list|raw}
 
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -72,27 +75,12 @@
 
 </script>
 <script>
+
     $('#xx').click(function () {
-
-        var i = $(this);
-        $.post('{:url("admin/Article/delete")}', {id: i.attr('data-delete-id')}, function (e) {
-
-            layer.alert(e.msg);
-
-        });
+        if (!confirm('你非得删除吗？')){
+            return false;
+        }
     });
-
-    $('#yy').click(function () {
-
-        var i = $(this);
-        $.post('{:url("admin/Article/upset")}', {id: i.attr('data-upset-id')}, function (e) {
-
-            layer.alert(e.msg);
-
-        });
-    });
-
-
 
 
     $('.status').click(function () {

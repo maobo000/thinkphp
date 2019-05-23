@@ -75,7 +75,7 @@ class Index extends  Controller
                 'path' => $path
                 ];
             if (category::create($data)) {
-                $this->success('成功');
+                $this->success('成功',url('admin/index/categoryList'));
             } else {
                 $this->error('失败');
             }
