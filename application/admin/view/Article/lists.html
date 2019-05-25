@@ -16,13 +16,12 @@
     <div class="row">
         <div class="col-sm-12">
 
-            <form method="post" action="" id="form" class="form-horizontal">
             <div class="ibox-content">
-
                 <table class="table table-bordered">
                     <thead>
                     <tr>
                         <th>#</th>
+                        <th>封面图</th>
                         <th>文章标题</th>
                         <th>所属分类</th>
                         <th>文章状态</th>
@@ -35,6 +34,13 @@
 
                     <tr>
                         <td>{$v.id}</td>
+                        <td>
+                            {if $v.minthumb}
+                            <img src="/{$v.minthumb}">
+                            {else/}
+                            <span>暂无封面</span>
+                            {/if}
+                        </td>
                         <td>{$v.title}</td>
                         <td>{$v.category.name}</td>
                         <td>
@@ -62,7 +68,6 @@
                 {$list|raw}
 
             </div>
-            </form>
         </div>
     </div>
 </div>

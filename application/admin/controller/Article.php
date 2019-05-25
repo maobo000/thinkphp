@@ -19,7 +19,7 @@ class Article extends Controller
         $res = $this->request;
         if ($res->isPost()) {
             //过度参数
-            $data = $res->only(['title', 'category_id', 'author', 'content', 'status']);
+            $data = $res->only(['title', 'category_id', 'author', 'content', 'status','thumb','minthumb']);
             //规则
             $rule = [
                 'title' => 'require|length:1,50',
@@ -126,7 +126,6 @@ class Article extends Controller
         //从库里查询并删除
         $a = \think\Db::table('article')->where('id', $id)->delete();
 
-
         if(empty($a)) {
             return $this->error('失败');
         }else{
@@ -195,7 +194,95 @@ class Article extends Controller
                 $this->assign('list', $list);
                 return $this->fetch();
             }
+    }
+
+
+    public function ueUploadImg(){
+
+        if ($this->request->isGet()){
+//            $configData = file_get_contents("static/ui/library/ue/php/config.json");
+//            $config = json_encode(preg_replace("/\/\*[\s\S]+?\*\//","",$configData),true);
+            $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("static/ui/library/ue/php/config.json")), true);
+            return json_encode($CONFIG);
         }
+
+
+
+        if ($this->request->isPost()){
+            $image = $this->request->file('upfile');
+            $res = $image->validate(['size'=>1048576, 'ext'=>'jpg,png,gif,jpeg'])->move('uploads');
+            if ($res){
+
+                $info =  [
+                    "originalName" => $res->getFilename() ,
+                    "name" => $res->getSaveName() ,
+                    "url" => '/'.$res->getPathname(),
+                    "size" => $res->getSize() ,
+                    "type" => $res->getExtension() ,
+                    "state" => 'SUCCESS'
+                ];
+
+                return json_encode($info);
+            }
+        }
+
+//        if ($this->request->isPost()){
+//
+//            $image = $this->request->file('upfile');
+//
+//            $res = $image->validate(['size'=>1048576,'ext'=>'jpg,png,git,jpeg'])->move('static/upload/');
+////            print_r($res->getPathname());
+//            if ($res){
+//                $info = [
+//                    'originalName' => $res->getFilename(),
+//                    'name'  => $res->getSaveName(),
+//                    'url'   => $res->getPathname(),
+//                    'size'  => $res->getSize(),
+//                    'type'  => $res->getExtension(),
+//                    'state' =>'SUCCESS'
+//                ];
+//                return json_encode($info);
+//            }else{
+//                return [
+//                    'state'=>'cuo'
+//                ];
+//            }
+//        }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    public function uploadImage(){
+
+        $image = $this->request->file('file');
+        $res = $image->validate(['size'=>1048576,'ext'=>'jpg,png,gif,jpeg'])->move('static/upload/');
+
+        if ($res){
+            $path = $res->getPathname();
+
+
+            $min = $res->getPath().'/min'.$res->getFilename();
+
+            $m = \think\Image::open($path);
+            $m->thumb(60, 60, \think\Image::THUMB_CENTER)->save($min);
+            return json(['code'=>1, 'thumb'=> $path, 'min'=> $min]);
+        }else{
+            return json(['code'=>0, 'info'=>$image->getError()]);
+
+        }
+    }
 
 
 }
