@@ -210,7 +210,7 @@ class Article extends Controller
 
         if ($this->request->isPost()){
             $image = $this->request->file('upfile');
-            $res = $image->validate(['size'=>1048576, 'ext'=>'jpg,png,gif,jpeg'])->move('uploads');
+            $res = $image->validate(['size'=>1048576, 'ext'=>'jpg,png,gif,jpeg'])->move('static/upload');
             if ($res){
 
                 $info =  [

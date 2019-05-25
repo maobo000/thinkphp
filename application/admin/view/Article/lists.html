@@ -41,7 +41,15 @@
                             <span>暂无封面</span>
                             {/if}
                         </td>
-                        <td>{$v.title}</td>
+                        <td>
+                            {if $v.image}
+                            {$v.title}<div id="img"></div>
+
+                            <!--{$v.title}<img id="img" src="/{$v.image}">-->
+                            {else/}
+                            <p>{$v.title}</p>
+                            {/if}
+                        </td>
                         <td>{$v.category.name}</td>
                         <td>
                             {if $v.status}
@@ -66,6 +74,8 @@
                 </table>
 
                 {$list|raw}
+                <input type="hidden" id="th" name="th" value="">
+                <input type="hidden" id="minth" name="minth" value="">
 
             </div>
         </div>
@@ -82,12 +92,20 @@
 <script>
 
     $('#xx').click(function () {
+
         if (!confirm('你非得删除吗？')){
             return false;
         }
     });
-
-
+    upload.on( 'uploadSuccess', function(file, res) {
+        if (res.code) {
+            $('#img').append('<img  style="height: 60px; width: 60px"  src="' + '/' + res.min + '">');
+            $('#th').val(res.th);
+            $('#minth').val(res.min);
+        } else {
+            layer.alert(res.info, {icon: 2})
+        }
+    });
     $('.status').click(function () {
 
         var i = $(this);
