@@ -1,0 +1,50 @@
+{extend name='linkman/centen' /}
+{block name='main'}
+
+<div class="loc" style="border:0px;">
+    <div class="w1100">
+        <a href="{:url('Index/index/news')}" {eq name="id" value="0"} class="on"{/eq}>全部</a>
+        {foreach $category as $v}
+        <a {eq name="id" value="$v['id']"} class="on"{/eq} href="{:url('Index/index/news', ['id'=>$v['id']])}">{$v.name}</a>
+        {/foreach}
+    </div>
+</div>
+<div class="mainbody">
+    <div class="title01">
+        {if $categoryInfo}
+        {$categoryInfo.name}
+        {else/}
+        全部新闻
+        {/if}
+    </div>
+</div>
+<div class="news_box">
+    <ul class="clearfix">
+        {foreach $list as $v}
+        <li>
+            <div class="w1100">
+                <div class="rq"><p class="day">{$v.create_time|date='y'}</p>
+                    <p class="month">{$v.create_time|date='m'}</p>
+                    <div class="clear"></div>
+                </div>
+                <div class="tp"><a href="{:url('index/Index/detail', ['id'=>$v['id']])}">
+                    <img src="/{$v.thumb}"></a>
+                </div>
+                <dl>
+                    <dt><a href="{:url('index/Index/detail', ['id'=>$v['id']])}">{$v.title}</a></dt>
+                    <dd></dd>
+                    <a class="more1" href="{:url('index/Index/detail', ['id'=>$v['id']])}">阅读详情</a>
+                    <div class="clear"></div>
+                </dl>
+                <div class="clear"></div>
+            </div>
+        </li>
+        {/foreach}
+        <div class="clear"></div>
+    </ul>
+    <div class="pages">
+        {$list|raw}
+    </div>
+</div>
+
+{/block}

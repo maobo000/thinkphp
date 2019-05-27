@@ -97,15 +97,17 @@
             return false;
         }
     });
-    upload.on( 'uploadSuccess', function(file, res) {
-        if (res.code) {
-            $('#img').append('<img  style="height: 60px; width: 60px"  src="' + '/' + res.min + '">');
-            $('#th').val(res.th);
-            $('#minth').val(res.min);
-        } else {
-            layer.alert(res.info, {icon: 2})
-        }
-    });
+
+    // upload.on( 'uploadSuccess', function(file, res) {
+    //     if (res.code) {
+    //         $('#img').append('<img  style="height: 60px; width: 60px"  src="' + '/' + res.min + '">');
+    //         $('#th').val(res.th);
+    //         $('#minth').val(res.min);
+    //     } else {
+    //         layer.alert(res.info, {icon: 2})
+    //     }
+    //
+    // });
     $('.status').click(function () {
 
         var i = $(this);

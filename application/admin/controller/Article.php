@@ -166,12 +166,6 @@ class Article extends Controller
             $cctv = \app\admin\model\article::get($id);
 
 
-//            if ($a->save($data)){
-//                $this->success('成功',url('admin/Article/lists'));
-//            }else{
-//                $this->error('失败');
-//            }
-
 
             if ($cctv->save($data)) {
 
