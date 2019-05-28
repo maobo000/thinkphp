@@ -1,8 +1,10 @@
 <?php
 namespace app\index\controller;
 
+use app\admin\controller\image;
 use app\admin\model\article;
 use app\admin\model\category;
+use app\admin\model\images;
 use think\Controller;
 
 class Index extends Controller
@@ -24,11 +26,11 @@ class Index extends Controller
 
             $this->assign('categoryInfo',$categoryInfo);
             $list = article::where('category_id',$id)->where('status',1)
-                ->order('create_time desc')->paginate(10);
+                ->order('create_time desc')->paginate(1);
         }else{
             $this->assign('categoryInfo','');
             $list = article::where('category_id','in',$categories)->where('status',1)
-                ->order('create_time desc')->paginate(10);
+                ->order('create_time desc')->paginate(1);
             print_r($categories);
         }
 
@@ -62,11 +64,32 @@ class Index extends Controller
         $this->categoryList(4);
 
         $info = article::where('category_id',$id)->find();
-      
+
         $this->assign('info',$info);
 
         $this->assign('id',$id);
 
         return $this->fetch();
+    }
+
+    public function idea(){
+
+        $id = $this->request->param('id',11);
+        $this->assign('id',$id);
+        $category = $this->categoryList(10);
+        if (empty($id)){
+            $where = [];
+        }else{
+            $where['category_id'] = $id;
+        }
+        $list = images::where($where)->select();
+        $this->assign('list',$list);
+        $categoryList = category::where('type',2)->select();
+
+        $this->assign('categoryList',$categoryList);
+        $images = images::where('category_id',$id)->all();
+        $this->assign('images',$images);
+        return $this->fetch();
+
     }
 }

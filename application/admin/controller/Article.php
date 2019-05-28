@@ -252,12 +252,6 @@ class Article extends Controller
 
 
 
-
-
-
-
-
-
     public function uploadImage(){
 
         $image = $this->request->file('file');

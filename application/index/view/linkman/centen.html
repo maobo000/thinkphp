@@ -17,7 +17,7 @@
         a {
             text-decoration: none;
         }
-        .pages {
+        .pagination {
             margin: 50px auto;
             text-align: center;
         }
@@ -50,8 +50,33 @@
 
         .box ul li {
             list-style: none;
+
         }
+         ul{
+            margin-top: 20px;
+        }
+        ul a {
+            margin-left: 20px;
+
+        }
+        .on{
+            margin-left: 20px;
+            color: #dcbf0a;
+
+        }
+
+        .pagination{
+            width: 100px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+
+
+
     </style>
+
+
 </head>
 <body>
 <div class="top">
@@ -60,19 +85,17 @@
     </div>
 </div>
 <div class="header w1100">
-    <div class="logo"><a href="http://www.laofengxiang.com/"></a></div>
+    <div class="logo"><a href=""></a></div>
     <div class="menu">
         <ul id="nav">
             <li class="top"><a href="/" class="top_link">首页</a></li>
             <li class="top"><a href="{:url('index/Index/about',['id'=>5])}" id="products" class="top_link">关于我们</a></li>
             <li class="top"><a href="{:url('index/Index/news')}" class="cur">新闻中心</a></li>
-            <li class="top"><a href="" id="services" class="top_link">产品欣赏</a>
+            <li class="top"><a href="{:url('index/Index/idea')}" id="services" class="top_link">产品欣赏</a>
             </li>
             <li class="top"><a href="" id="shop" class="top_link">大师风采</a></li>
             <li class="top"><a href="" id="contacts" class="top_link">名人代言</a></li>
             <li class="top"><a href="" class="top_link">专卖店查询</a></li>
-            <!--  <li class="top"><a href="/customer" id="privacy" class="top_link">客服中心</a></li> -->
-            <!--  <li class="top"><a href="/customer" id="privacy" class="top_link">服务点</a></li> -->
             <li class="last"><a href="" target="_blank" class="top_link">资料下载</a></li>
         </ul>
     </div>
@@ -94,7 +117,7 @@
                 </a>&nbsp;&nbsp;&nbsp;&nbsp;使用条款私隐
             </p>
         </div>
-        <div class="clear"></div>
+        <!--<div class="clear"></div>-->
     </div>
 </div>
 

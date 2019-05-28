@@ -72,7 +72,8 @@ class Index extends  Controller
                 'name'=>$name,
                 'pid' => $pid,
                 'level' => $level,
-                'path' => $path
+                'path' => $path,
+                'type' => $res->param('type')
                 ];
             if (category::create($data)) {
                 $this->success('成功',url('admin/index/categoryList'));
@@ -96,6 +97,13 @@ class Index extends  Controller
                     $space .= '&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
                 $url = url('admin/Index/addCategory', ['id'=>$v['id']]);
+
+                $tmp = explode('-', trim($v['path'], '0-'));
+                $cls = '';
+                foreach ($tmp as $vv){
+                    $cls .= 'x'.$vv.' ';
+                }
+
                 $str .= <<<DDDD
                     <tr class="x{$pid}">
                         <td>{$v['id']}</td>
