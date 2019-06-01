@@ -84,6 +84,7 @@
                 '                    </li>');
             $('.uploadBtn').before('<input type="hidden" name="xxxx[]" value="/'+res.thumb+'">')
         } else {
+            // console.log(res.code);
             layer.alert(res.info, {icon: 2})
         }
     });

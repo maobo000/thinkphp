@@ -117,15 +117,12 @@ class Article extends Controller
 
     public function delete()
     {
-
         $id = $this->request->param('id');
-
         if (empty($id)) {
             $this->error('失败');
         }
         //从库里查询并删除
         $a = \think\Db::table('article')->where('id', $id)->delete();
-
         if(empty($a)) {
             return $this->error('失败');
         }else{
@@ -146,7 +143,6 @@ class Article extends Controller
                 'content' => 'require|length:10,65535',
 //                'status' => 'in:0,1'
             ];
-
             $msg = [
                 'title.require' => '文章标题为必填项',
                 'title.length' => '文章标题应在1-50字之间',
@@ -162,23 +158,14 @@ class Article extends Controller
             if ($check !== true) {
                 $this->error($check);
             }
-
             $cctv = \app\admin\model\article::get($id);
-
-
-
             if ($cctv->save($data)) {
-
                 $this->success('修改成功',url('admin/Article/lists'));
             } else {
-
                 $this->error('修改失败2');
             }
 
         }
-
-
-
             if ($re->isGet()) {
 
                 $id = $this->request->param('id');
@@ -194,14 +181,13 @@ class Article extends Controller
     public function ueUploadImg(){
 
         if ($this->request->isGet()){
-//            $configData = file_get_contents("static/ui/library/ue/php/config.json");
-//            $config = json_encode(preg_replace("/\/\*[\s\S]+?\*\//","",$configData),true);
-            $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("static/ui/library/ue/php/config.json")), true);
+
+            $configData = file_get_contents("static/ui/library/ue/php/config.json");
+//            $config = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", $configData), true);
+
+            $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", $configData), true);
             return json_encode($CONFIG);
         }
-
-
-
         if ($this->request->isPost()){
             $image = $this->request->file('upfile');
             $res = $image->validate(['size'=>1048576, 'ext'=>'jpg,png,gif,jpeg'])->move('static/upload');
@@ -220,54 +206,25 @@ class Article extends Controller
             }
         }
 
-//        if ($this->request->isPost()){
-//
-//            $image = $this->request->file('upfile');
-//
-//            $res = $image->validate(['size'=>1048576,'ext'=>'jpg,png,git,jpeg'])->move('static/upload/');
-////            print_r($res->getPathname());
-//            if ($res){
-//                $info = [
-//                    'originalName' => $res->getFilename(),
-//                    'name'  => $res->getSaveName(),
-//                    'url'   => $res->getPathname(),
-//                    'size'  => $res->getSize(),
-//                    'type'  => $res->getExtension(),
-//                    'state' =>'SUCCESS'
-//                ];
-//                return json_encode($info);
-//            }else{
-//                return [
-//                    'state'=>'cuo'
-//                ];
-//            }
-//        }
-
-
-
     }
-
-
-
-
 
 
     public function uploadImage(){
 
         $image = $this->request->file('file');
-        $res = $image->validate(['size'=>1048576,'ext'=>'jpg,png,gif,jpeg'])->move('static/upload/');
+
+
+        $res = $image->validate(['size'=>1048576, 'ext'=>'jpg,png,gif,jpeg'])->move('static/upload/');
 
         if ($res){
             $path = $res->getPathname();
-
-
             $min = $res->getPath().'/min'.$res->getFilename();
 
             $m = \think\Image::open($path);
             $m->thumb(60, 60, \think\Image::THUMB_CENTER)->save($min);
-            return json(['code'=>1, 'thumb'=> $path, 'min'=> $min]);
+            return json_encode(['code'=>1, 'thumb'=> $path, 'min'=> $min]);
         }else{
-            return json(['code'=>0, 'info'=>$image->getError()]);
+            return json_encode(['code'=>0, 'info'=>$image->getError()]);
 
         }
     }
